@@ -1,8 +1,13 @@
 {
   "dependencies": {
+    "axios": "^0.27.2",
     "parcel": "^2.5.0"
   },
   "devDependencies": {
     "typescript": "^4.6.4"
+  },
+  "scripts": {
+    "start:db": "json-server -w db.json",
+    "start:parcel": "parcel index.html"
   }
 }
