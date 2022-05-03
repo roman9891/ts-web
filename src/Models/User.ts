@@ -1,15 +1,17 @@
-import axios, { AxiosResponse } from 'axios'
+import { Eventing } from './Eventing'
+import { Sync } from './Sync'
 
-interface UserProps {
+export interface UserProps {
   id?: number
   name?: string
   age?: number
 }
 
-type Callback = () => void
+const rootURL = 'http://localhost:3000/users'
 
 export class User {
-  events: { [key: string]: Callback[] } = {}
+  public events: Eventing = new Eventing()
+  public sunc: Sync<UserProps> = new Sync<UserProps>(rootURL)
 
   constructor(private data: UserProps) {}
 
@@ -19,27 +21,5 @@ export class User {
 
   set(updateProps: UserProps): void {
     Object.assign(this.data, updateProps)
-  }
-
-  on(event: string, callback: Callback): void {
-    const handlers = this.events[event] || []
-    handlers.push(callback)
-    this.events[event] = handlers
-  }
-
-  trigger(event: string): void {
-    const handlers = this.events[event]
-
-    if (!handlers || handlers.length === 0) return
-
-    handlers.forEach((callback) => callback())
-  }
-
-  fetch(): void {
-    axios
-      .get(`http://localhost:3000/users/${this.get('id')}`)
-      .then((response: AxiosResponse): void => {
-        this.set(response.data)
-      })
   }
 }
