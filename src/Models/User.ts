@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios'
+import { Attributes } from './Attributes'
 import { Eventing } from './Eventing'
 import { Sync } from './Sync'
 
@@ -11,15 +13,39 @@ const rootURL = 'http://localhost:3000/users'
 
 export class User {
   public events: Eventing = new Eventing()
-  public sunc: Sync<UserProps> = new Sync<UserProps>(rootURL)
+  public sync: Sync<UserProps> = new Sync<UserProps>(rootURL)
+  public attributes: Attributes<UserProps>
 
-  constructor(private data: UserProps) {}
-
-  get(propName: string): number | string {
-    return this.data[propName]
+  constructor(attrs: UserProps) {
+    this.attributes = new Attributes<UserProps>(attrs)
   }
 
-  set(updateProps: UserProps): void {
-    Object.assign(this.data, updateProps)
+  get on() {
+    return this.events.on
+  }
+
+  get trigger() {
+    return this.events.trigger
+  }
+
+  get get() {
+    return this.attributes.get
+  }
+
+  set(update: UserProps): void {
+    this.attributes.set(update)
+    this.events.trigger('change')
+  }
+
+  fetch(): void {
+    const id = this.attributes.get('id')
+
+    if (!id) {
+      throw new Error('Cannot fetch without an id')
+    } else {
+      this.sync.fetch(id).then((response: AxiosResponse): void => {
+        this.set(response.data)
+      })
+    }
   }
 }
