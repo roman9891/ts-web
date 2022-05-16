@@ -1,11 +1,10 @@
 import axios, { AxiosPromise } from 'axios'
-import { UserProps } from './User'
 
 interface HasID {
   id?: number
 }
 
-export class Sync<Props extends HasID> {
+export class ApiSync<Props extends HasID> {
   constructor(public rootURL: string) {}
 
   fetch(id: number): AxiosPromise {

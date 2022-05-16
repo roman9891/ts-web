@@ -1,9 +1,9 @@
-import { User } from './Models/User'
+import axios from 'axios'
 
-const user = new User({ id: 1 })
+const fetchData = async (): Promise<void> => {
+  const data = await axios.get('http://localhost:3000/users')
 
-user.on('change', () => {
-  console.log('changed')
-})
+  console.log(data)
+}
 
-user.fetch()
+fetchData()

@@ -10,4 +10,8 @@ export class Attributes<Props> {
   set(updateProps: Props): void {
     Object.assign(this.data, updateProps)
   }
+
+  getAll(): Props {
+    return this.data
+  }
 }
