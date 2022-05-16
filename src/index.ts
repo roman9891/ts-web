@@ -1,9 +1,19 @@
 import axios from 'axios'
+import { Collection } from './Models/Collection'
+import { User, UserProps } from './Models/User'
 
-const fetchData = async (): Promise<void> => {
-  const data = await axios.get('http://localhost:3000/users')
-
-  console.log(data)
+const URL = 'http://localhost:3000/users'
+const userProps = {
+  name: 'test',
+  age: 0,
 }
 
-fetchData()
+const user = User.buildUser(userProps)
+
+const collection = User.buildUserCollection()
+
+user.save()
+
+collection.fetch()
+
+console.log(collection.models)
