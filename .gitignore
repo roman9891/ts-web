@@ -1,4 +1,5 @@
 .prettierrc
+tsconfig.json
 db.json
 # Logs
 logs
